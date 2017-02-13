@@ -35,8 +35,10 @@ Plugin 'christoomey/vim-tmux-navigator'
 
 " Random stuff
 Plugin 'jez/vim-better-sml'
-Plugin 'jez/vim-c0'
-Plugin 'kchmck/vim-coffee-script'
+"Plugin 'jez/vim-c0'
+"Plugin 'kchmck/vim-coffee-script'
+
+Plugin 'rhysd/vim-clang-format'
 
 call vundle#end()
 
@@ -44,12 +46,19 @@ call vundle#end()
 nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
 let g:nerdtree_tabs_open_on_console_startup = 0
 
+map <CR> :w<CR>
+
 " ------------- Syntastic settings -----------------------------------------------------
 
 let g:syntastic_error_symbol = '✘'
 let g:syntastic_warning_symbol = "▲"
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
 "nnoremap <C-w>e :SyntasticCheck<CR> :SyntasticToggleMode<CR>
+"
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
+let g:syntastic_cpp_include_dirs = ['includes', 'headers']
+let g:syntastic_cpp_check_header = 1
 
 augroup mySyntastic
   au!
@@ -62,7 +71,7 @@ augroup mySyntastic
 augroup END
 
 " press <Leader>s (i.e., \s) to not automatically check for errors
-augroup END
+"augroup END
 
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
@@ -75,7 +84,23 @@ let g:syntastic_check_on_wq = 0
 
 nmap <silent> <leader>s :SyntasticToggleMode<CR>
 
-" -------------------------------------------------------------------------------------
+augroup standard
+  autocmd!
+  autocmd BufNewFile,BufRead */15410-s17-users/*
+        \ setlocal tabstop=2 shiftwidth=2 softtabstop=2
+        \ | let b:syntastic_checkers = ['make']
+        \ | let b:syntastic_c_make_frame = shellescape(expand("%:r"))
+augroup END
+
+
+" --------- Clang Format Settings ------------------------------
+augroup clang_format " {
+    autocmd!
+    autocmd FileType c ClangFormatAutoEnable
+    autocmd FileType c nmap <buffer> = :ClangFormat<CR>
+    autocmd FileType c vmap <buffer> = :ClangFormat<CR>
+augroup END " }
+let g:clang_format#detect_style_file=1
 
 "Open/close majutsushi tagbar with \b
 nmap <silent> <leader>b :TagbarToggle<CR>
@@ -93,6 +118,12 @@ syntax on
 retab
 
 set mouse=a
+set cursorline
+
+if &term =~ '^screen'
+    " tmux knows the extended mouse mode
+    set ttymouse=xterm2
+endif
 
 set background=dark
 "let g:solarized_termcolors=256
@@ -135,3 +166,4 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 " Clear last search highlighting
 map <Space> :noh<cr>
+
