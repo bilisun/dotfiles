@@ -14,16 +14,17 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'bling/vim-airline'
 
 " Vim text editor
-Plugin 'scrooloose/nerdtree'
-Plugin 'jistr/vim-nerdtree-tabs'
+"Plugin 'scrooloose/nerdtree'
+"Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'scrooloose/syntastic'
-Plugin 'xolox/vim-misc'
+"Plugin 'xolox/vim-misc'
 "Plugin 'xolox/vim-easytags'
-Plugin 'majutsushi/tagbar'
+"Plugin 'majutsushi/tagbar'
 Plugin 'kien/ctrlp.vim'
 Plugin 'vim-scripts/a.vim'
 Plugin 'Raimondi/delimitMate'
 Plugin 'tomtom/tcomment_vim'
+Plugin 'Valloric/YouCompleteMe'
 
 " Git
 Plugin 'airblade/vim-gitgutter'
@@ -39,14 +40,19 @@ Plugin 'jez/vim-better-sml'
 "Plugin 'kchmck/vim-coffee-script'
 
 Plugin 'rhysd/vim-clang-format'
+Plugin 'mileszs/ack.vim'
 
 call vundle#end()
 
 " Open/close NERDTree Tabs with \t
-nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
-let g:nerdtree_tabs_open_on_console_startup = 0
+" nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
+" let g:nerdtree_tabs_open_on_console_startup = 0
 
-map <CR> :w<CR>
+" Ctrlp
+" let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
+" if executable('ag')
+"   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+" endif
 
 " ------------- Syntastic settings -----------------------------------------------------
 
@@ -94,13 +100,13 @@ augroup END
 
 
 " --------- Clang Format Settings ------------------------------
-augroup clang_format " {
-    autocmd!
-    autocmd FileType c ClangFormatAutoEnable
-    autocmd FileType c nmap <buffer> = :ClangFormat<CR>
-    autocmd FileType c vmap <buffer> = :ClangFormat<CR>
-augroup END " }
-let g:clang_format#detect_style_file=1
+" augroup clang_format " {
+"     autocmd!
+"     autocmd FileType c ClangFormatAutoEnable
+"     autocmd FileType c nmap <buffer> = :ClangFormat<CR>
+"     autocmd FileType c vmap <buffer> = :ClangFormat<CR>
+" augroup END " }
+" let g:clang_format#detect_style_file=1
 
 "Open/close majutsushi tagbar with \b
 nmap <silent> <leader>b :TagbarToggle<CR>
@@ -149,8 +155,9 @@ set wildmenu
 set wildignore=.svn,CVS,.git,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*.xpm,*.gif
 set splitright
 set shiftwidth=2
-set textwidth=80
+set textwidth=100
 set ttyfast "speed up
+set backspace=indent,eol,start
 
 command! WQ wq
 command! Wq wq
@@ -166,4 +173,4 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 " Clear last search highlighting
 map <Space> :noh<cr>
-
+map <CR> :w<CR>
