@@ -14,24 +14,26 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'bling/vim-airline'
 
 " Vim text editor
-"Plugin 'scrooloose/nerdtree'
-"Plugin 'jistr/vim-nerdtree-tabs'
+Plugin 'scrooloose/nerdtree'
+Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'scrooloose/syntastic'
-"Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-misc'
 "Plugin 'xolox/vim-easytags'
-"Plugin 'majutsushi/tagbar'
-Plugin 'kien/ctrlp.vim'
+Plugin 'majutsushi/tagbar'
 Plugin 'vim-scripts/a.vim'
 Plugin 'Raimondi/delimitMate'
 Plugin 'tomtom/tcomment_vim'
-Plugin 'Valloric/YouCompleteMe'
+
+" Ctrl p
+Plugin 'kien/ctrlp.vim'
+Plugin 'JazzCore/ctrlp-cmatcher'
 
 " Git
-Plugin 'airblade/vim-gitgutter'
-Plugin 'tpope/vim-fugitive'
+"Plugin 'airblade/vim-gitgutter'
+"Plugin 'tpope/vim-fugitive'
 
 " Tmux + man
-Plugin 'jez/vim-superman'
+"Plugin 'jez/vim-superman'
 Plugin 'christoomey/vim-tmux-navigator'
 
 " Random stuff
@@ -40,19 +42,24 @@ Plugin 'jez/vim-better-sml'
 "Plugin 'kchmck/vim-coffee-script'
 
 Plugin 'rhysd/vim-clang-format'
-Plugin 'mileszs/ack.vim'
 
 call vundle#end()
 
 " Open/close NERDTree Tabs with \t
-" nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
-" let g:nerdtree_tabs_open_on_console_startup = 0
+nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
+let g:nerdtree_tabs_open_on_console_startup = 0
 
-" Ctrlp
-" let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
-" if executable('ag')
-"   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-" endif
+map <CR> :w<CR>
+let g:ctrlp_custom_ignore = {                                                                                                                                                                                                                                                                                         [64/348]
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg|db|jar|gif|cache)$',
+  \ }
+let g:ctrlp_user_command = 'ag --vimgrep --nogroup --nobreak --noheading --nocolor -g'
+let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_lazy_update = 100
+let g:ctrlp_max_files = 0
+"let g:ackprg = 'ag -s -H --nocolor --nogroup --column --vimgrep --follow'
+let g:ctrlp_match_func = {'match' : 'matcher#cmatch'}
 
 " ------------- Syntastic settings -----------------------------------------------------
 
@@ -100,17 +107,16 @@ augroup END
 
 
 " --------- Clang Format Settings ------------------------------
-" augroup clang_format " {
-"     autocmd!
-"     autocmd FileType c ClangFormatAutoEnable
-"     autocmd FileType c nmap <buffer> = :ClangFormat<CR>
-"     autocmd FileType c vmap <buffer> = :ClangFormat<CR>
-" augroup END " }
-" let g:clang_format#detect_style_file=1
+augroup clang_format " {
+    autocmd!
+    autocmd FileType c ClangFormatAutoEnable
+    autocmd FileType c nmap <buffer> = :ClangFormat<CR>
+    autocmd FileType c vmap <buffer> = :ClangFormat<CR>
+augroup END " }
+let g:clang_format#detect_style_file=1
 
 "Open/close majutsushi tagbar with \b
 nmap <silent> <leader>b :TagbarToggle<CR>
-
 " Show PASTE if in paste mode
 let g:airline_detect_paste=1
 
@@ -132,10 +138,8 @@ if &term =~ '^screen'
 endif
 
 set background=dark
-"let g:solarized_termcolors=256
-"Comment the next two lines if you don't want solarized
-"set t_Co=16
 colorscheme solarized
+set t_Co=256
 
 set laststatus=2                                             " always show statusline
 
@@ -149,15 +153,12 @@ set encoding=utf-8
 set list
 set listchars=tab:▸\ ,trail:▫
 set title
-set ignorecase
-set smartcase
 set wildmenu
 set wildignore=.svn,CVS,.git,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*.xpm,*.gif
 set splitright
 set shiftwidth=2
-set textwidth=100
+set textwidth=80
 set ttyfast "speed up
-set backspace=indent,eol,start
 
 command! WQ wq
 command! Wq wq
@@ -173,4 +174,10 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 " Clear last search highlighting
 map <Space> :noh<cr>
-map <CR> :w<CR>
+
+if has ('autocmd') " Remain compatible with earlier versions
+ augroup vimrc     " Source vim configuration upon save
+    autocmd! BufWritePost $MYVIMRC source % | echom "Reloaded " . $MYVIMRC | redraw
+    autocmd! BufWritePost $MYGVIMRC if has('gui_running') | so % | echom "Reloaded " . $MYGVIMRC | endif | redraw
+  augroup END
+endif " has autocmd
