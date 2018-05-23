@@ -141,6 +141,7 @@ colorscheme solarized
 
 set laststatus=2                                             " always show statusline
 
+"https://medium.com/@sasom/macos-iterm2-vim-tmux-system-clipboard-2f269c976aa
 set clipboard=unnamed                                    " yank and paste with the system clipboard
 set expandtab
 set tabstop=2
